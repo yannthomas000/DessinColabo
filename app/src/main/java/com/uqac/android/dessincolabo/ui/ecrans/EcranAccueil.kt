@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Modèle de données temporaire pour les placeholders
 data class TableauApercu(
     val id: String,
     val nom: String,
@@ -44,7 +43,6 @@ data class TableauApercu(
 fun EcranAccueil(
     onDeconnexion: () -> Unit
 ) {
-    // Données factices pour visualiser le rendu
     val tableauxPlaceholders = remember {
         listOf(
             TableauApercu(
@@ -99,7 +97,7 @@ fun EcranAccueil(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { /* Action de création à brancher plus tard */ },
+                onClick = {  },
                 icon = { Icon(Icons.Default.Add, contentDescription = null) },
                 text = { Text("Nouveau tableau") },
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -111,7 +109,7 @@ fun EcranAccueil(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(
                 top = paddingValues.calculateTopPadding() + 12.dp,
-                bottom = paddingValues.calculateBottomPadding() + 88.dp, // Espace pour ne pas masquer la dernière carte sous le FAB
+                bottom = paddingValues.calculateBottomPadding() + 88.dp,
                 start = 16.dp,
                 end = 16.dp
             ),
@@ -132,7 +130,7 @@ fun CarteTableau(
     modifier: Modifier = Modifier
 ) {
     Card(
-        onClick = { /* Ouverture du tableau en grand à venir */ },
+        onClick = {  },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -142,7 +140,6 @@ fun CarteTableau(
         modifier = modifier.fillMaxWidth()
     ) {
         Column {
-            // 1. Zone miniature du tableau (Canvas placeholder)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,7 +147,6 @@ fun CarteTableau(
                     .background(Color(0xFFF8FAFC))
             ) {
                 Canvas(modifier = Modifier.fillMaxSize()) {
-                    // Quadrillage léger façon tableau blanc
                     val step = 20.dp.toPx()
                     for (x in 0..size.width.toInt() step step.toInt()) {
                         drawLine(
@@ -169,7 +165,6 @@ fun CarteTableau(
                         )
                     }
 
-                    // Tracé d'aperçu simulé
                     val path = Path().apply {
                         moveTo(size.width * 0.18f, size.height * 0.65f)
                         quadraticTo(
@@ -191,7 +186,6 @@ fun CarteTableau(
 
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-            // 2. Informations du tableau + Icônes des collaborateurs
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -216,7 +210,6 @@ fun CarteTableau(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Rangée d'icônes des utilisateurs ayant accès au tableau
                 GroupeAvatarsUtilisateurs(couleurs = tableau.couleursUtilisateurs)
             }
         }
@@ -233,7 +226,7 @@ fun GroupeAvatarsUtilisateurs(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy((-8).dp) // Chevauchement propre des icônes
+        horizontalArrangement = Arrangement.spacedBy((-8).dp)
     ) {
         visibles.forEach { couleur ->
             Box(
