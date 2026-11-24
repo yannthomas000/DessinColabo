@@ -3,12 +3,18 @@ package com.uqac.android.dessincolabo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import com.uqac.android.dessincolabo.ui.ecrans.EcranAccueil
 import com.uqac.android.dessincolabo.ui.ecrans.EcranConnexion
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -42,7 +48,7 @@ fun ApplicationTableau() {
             }
         }
         is SessionStatus.Authenticated -> {
-            EcranTableauPlaceholder(
+            EcranAccueil(
                 onDeconnexion = {
                     coroutineScope.launch {
                         SupabaseManager.client.auth.signOut()
@@ -52,24 +58,8 @@ fun ApplicationTableau() {
         }
         else -> {
             EcranConnexion(
-                onConnexionReussie = {
-                }
+                onConnexionReussie = { }
             )
-        }
-    }
-}
-
-@Composable
-fun EcranTableauPlaceholder(onDeconnexion: () -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Connecté au tableau collaboratif !", style = MaterialTheme.typography.titleLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onDeconnexion) {
-            Text("Se déconnecter")
         }
     }
 }
