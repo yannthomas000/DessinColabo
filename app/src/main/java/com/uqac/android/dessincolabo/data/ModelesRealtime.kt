@@ -1,4 +1,4 @@
-package com.uqac.android.dessincolabo
+package com.uqac.android.dessincolabo.data
 
 import kotlinx.serialization.Serializable
 

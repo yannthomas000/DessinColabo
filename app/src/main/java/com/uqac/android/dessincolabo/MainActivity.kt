@@ -17,10 +17,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.uqac.android.dessincolabo.network.SupabaseManager
 import com.uqac.android.dessincolabo.ui.EcranTableau
 import com.uqac.android.dessincolabo.ui.ecrans.EcranAccueil
 import com.uqac.android.dessincolabo.ui.ecrans.EcranConnexion
-import com.uqac.android.dessincolabo.ui.ecrans.TableauApercu
+import com.uqac.android.dessincolabo.data.TableauApercu
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.uqac.android.dessincolabo
+package com.uqac.android.dessincolabo.network
 
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient

@@ -1,5 +1,6 @@
-package com.uqac.android.dessincolabo
+package com.uqac.android.dessincolabo.network
 
+import com.uqac.android.dessincolabo.data.PaquetTraitDirect
 import io.github.jan.supabase.realtime.RealtimeChannel
 import io.github.jan.supabase.realtime.broadcast
 import io.github.jan.supabase.realtime.broadcastFlow

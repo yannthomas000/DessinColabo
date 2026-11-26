@@ -20,9 +20,9 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import com.uqac.android.dessincolabo.GestionnaireRealtime
-import com.uqac.android.dessincolabo.PaquetTraitDirect
-import com.uqac.android.dessincolabo.SupabaseManager
+import com.uqac.android.dessincolabo.network.GestionnaireRealtime
+import com.uqac.android.dessincolabo.data.PaquetTraitDirect
+import com.uqac.android.dessincolabo.network.SupabaseManager
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.*
 import java.util.UUID

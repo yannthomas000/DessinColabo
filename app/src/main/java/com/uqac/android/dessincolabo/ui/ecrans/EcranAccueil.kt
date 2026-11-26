@@ -29,14 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uqac.android.dessincolabo.data.TableauApercu
 
-data class TableauApercu(
-    val id: String,
-    val nom: String,
-    val derniereModif: String,
-    val couleursUtilisateurs: List<Color>,
-    val couleurTraitApercu: Color
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
