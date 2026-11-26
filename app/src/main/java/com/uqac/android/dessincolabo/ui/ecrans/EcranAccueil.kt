@@ -41,7 +41,8 @@ data class TableauApercu(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EcranAccueil(
-    onDeconnexion: () -> Unit
+    onDeconnexion: () -> Unit,
+    onOuvrirTableau: (TableauApercu) -> Unit
 ) {
     val tableauxPlaceholders = remember {
         listOf(
@@ -118,7 +119,10 @@ fun EcranAccueil(
             modifier = Modifier.fillMaxSize()
         ) {
             items(tableauxPlaceholders, key = { it.id }) { tableau ->
-                CarteTableau(tableau = tableau)
+                CarteTableau(
+                    tableau = tableau,
+                    onClick = { onOuvrirTableau(tableau) }
+                )
             }
         }
     }
@@ -127,10 +131,11 @@ fun EcranAccueil(
 @Composable
 fun CarteTableau(
     tableau: TableauApercu,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
-        onClick = {  },
+        onClick = onClick,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
