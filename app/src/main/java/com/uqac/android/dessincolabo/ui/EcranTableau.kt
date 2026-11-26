@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import com.uqac.android.dessincolabo.network.GestionnaireRealtime
+import com.uqac.android.dessincolabo.GestionnaireRealtime
 import com.uqac.android.dessincolabo.data.PaquetTraitDirect
 import com.uqac.android.dessincolabo.network.SupabaseManager
 import io.github.jan.supabase.auth.auth
@@ -53,6 +53,7 @@ fun EcranTableau(
     val gestionnaire = remember(tableauId) {
         GestionnaireRealtime(
             tableauId = tableauId,
+            nomTableau = nomTableau,
             monUtilisateurId = userId,
             scope = scope,
             onPaquetRecu = { paquet ->
@@ -71,8 +72,8 @@ fun EcranTableau(
         val jobConnexion = scope.launch {
             try {
                 gestionnaire.connecter()
-            } catch (_: Exception) {
-                // Permet de continuer à dessiner localement même hors ligne
+            } catch (e: Exception) {
+                android.util.Log.e("RealtimeTableau", "Échec connexion au tableau $nomTableau", e)
             }
         }
 
@@ -82,17 +83,15 @@ fun EcranTableau(
                 if (pointsEnAttente.isNotEmpty() && traitActuelId.isNotEmpty()) {
                     val lot = pointsEnAttente.toList()
                     pointsEnAttente.clear()
-                    try {
-                        gestionnaire.envoyerPaquet(
-                            PaquetTraitDirect(
-                                traitId = traitActuelId,
-                                auteurId = userId,
-                                couleurHex = "#000000",
-                                epaisseur = 8f,
-                                points = lot
-                            )
+                    gestionnaire.envoyerPaquet(
+                        PaquetTraitDirect(
+                            traitId = traitActuelId,
+                            auteurId = userId,
+                            couleurHex = "#000000",
+                            epaisseur = 8f,
+                            points = lot
                         )
-                    } catch (_: Exception) { }
+                    )
                 }
             }
         }
@@ -103,7 +102,9 @@ fun EcranTableau(
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     gestionnaire.deconnecter()
-                } catch (_: Exception) { }
+                } catch (e: Exception) {
+                    android.util.Log.e("RealtimeTableau", "Erreur déconnexion", e)
+                }
             }
         }
     }
