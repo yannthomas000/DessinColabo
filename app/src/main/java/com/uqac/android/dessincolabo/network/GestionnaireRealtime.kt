@@ -7,6 +7,7 @@ import io.github.jan.supabase.realtime.RealtimeChannel
 import io.github.jan.supabase.realtime.broadcast
 import io.github.jan.supabase.realtime.broadcastFlow
 import io.github.jan.supabase.realtime.channel
+import io.github.jan.supabase.realtime.realtime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -24,7 +25,11 @@ class GestionnaireRealtime(
 
     suspend fun connecter() {
         val nomCanal = "tableau_$tableauId"
-        Log.d("RealtimeTableau", "Tentative de connexion au tableau '$nomTableau' (canal=$nomCanal, user=$monUtilisateurId)")
+        Log.d("RealtimeTableau", "1. Initialisation du canal $nomCanal...")
+
+        // Démarrer explicitement la connexion WebSocket globale si elle n'est pas ouverte
+        SupabaseManager.client.realtime.connect()
+        Log.d("RealtimeTableau", "2. WebSocket global connecté")
 
         val nouveauCanal = SupabaseManager.client.channel(nomCanal) {
             broadcast {
@@ -33,27 +38,25 @@ class GestionnaireRealtime(
             }
         }
 
-        // 1. Écoute des messages entrants AVANT subscribe()
+        // Écouter les paquets entrants avant de souscrire
         nouveauCanal.broadcastFlow<PaquetTraitDirect>(event = "trait_direct")
             .onEach { paquet ->
                 Log.d(
                     "RealtimeTableau",
-                    "REÇU sur '$nomTableau' (id=$tableauId) -> trait=${paquet.traitId}, auteur=${paquet.auteurId}, points=${paquet.points.size}"
+                    "REÇU sur '$nomTableau' -> trait=${paquet.traitId}, auteur=${paquet.auteurId}, points=${paquet.points.size}"
                 )
                 if (paquet.auteurId != monUtilisateurId) {
                     withContext(Dispatchers.Main) {
                         onPaquetRecu(paquet)
                     }
-                } else {
-                    Log.d("RealtimeTableau", "Paquet ignoré (c'est mon propre trait)")
                 }
             }
             .launchIn(scope)
 
-        // 2. Souscription au canal
+        Log.d("RealtimeTableau", "3. Souscription au canal $nomCanal...")
         nouveauCanal.subscribe()
         canal = nouveauCanal
-        Log.i("RealtimeTableau", "CONNECTÉ au tableau '$nomTableau' (canal=$nomCanal)")
+        Log.i("RealtimeTableau", "4. CONNECTÉ au tableau '$nomTableau' (canal=$nomCanal)")
     }
 
     suspend fun envoyerPaquet(paquet: PaquetTraitDirect) {
@@ -77,7 +80,7 @@ class GestionnaireRealtime(
     }
 
     suspend fun deconnecter() {
-        Log.d("RealtimeTableau", "Déconnexion du tableau '$nomTableau' (id=$tableauId)")
+        Log.d("RealtimeTableau", "Déconnexion du tableau '$nomTableau'")
         canal?.unsubscribe()
         canal = null
     }
